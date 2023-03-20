@@ -1,0 +1,4 @@
+traducir .ui a codigo python:
+    pyuic5 -x UI.ui -o ui_mainwindow.py
+    donde UI.ui es el nombre del archivo de interfaz QT
+    y ui_mainwindow.py es el nombre del archivo de salida
