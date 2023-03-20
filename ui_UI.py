@@ -62,4 +62,4 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "Red Neuronal Unicapa"))
         self.btnClasificar.setText(_translate("MainWindow", "Clasificar"))
         self.lblNombre.setText(_translate("MainWindow", "Herrada Serrano Jorge Luis"))
-        self.txtArchivo.setText(_translate("MainWindow", "Sin archivo seleccionado"))
+        self.txtArchivo.setText(_translate("MainWindow", "entradas.csv"))

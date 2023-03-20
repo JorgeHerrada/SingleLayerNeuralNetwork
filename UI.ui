@@ -93,7 +93,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Sin archivo seleccionado</string>
+     <string>entradas.csv</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
