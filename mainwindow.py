@@ -65,11 +65,13 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot()
     def click_clasificar(self):
+        #limpiamos pesos, bias y plots
+        self.neuron.clear()
 
         # validamos que existe el archivo
         print("Archivo seleccionado: {}".format(self.ui.txtArchivo.text()))
         # leemos y definimos X y Y desde archivos
-        X,Y = self.leerEntradas()
+        X,Y = self.leerEntradas(self.ui.txtArchivo.text())
 
         # # Creamos neurona, entrada y learning rate
         # neuron = Perceptron(2, 0.1) 
@@ -84,9 +86,9 @@ class MainWindow(QMainWindow):
         self.salidas = []
         
 
-    def leerEntradas(self):
+    def leerEntradas(self,nombreArchivo):
         
-        with open("entradas.csv", 'r') as file:
+        with open(nombreArchivo, 'r') as file:
             lines = file.readlines()
         
         lines = self.limpiarSaltos(lines) # limpiar saltos de linea
@@ -103,7 +105,9 @@ class MainWindow(QMainWindow):
 
         print("X: ", X.transpose())
 
-        with open("salidas.csv", 'r') as file:
+        nombreArchivoSalidas = "salidas.csv"
+
+        with open(nombreArchivoSalidas, 'r') as file:
             lines = file.readlines()
 
         lines = self.limpiarSaltos(lines)
