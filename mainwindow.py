@@ -4,6 +4,7 @@ from PyQt5.QtCore import pyqtSlot
 from perceptron import Perceptron
 from PyQt5 import QtGui
 import numpy as np
+import csv
 
 class MainWindow(QMainWindow):
     entradas = []
@@ -15,15 +16,14 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.ui.btnAgregar.clicked.connect(self.click_agregar)
+        # self.ui.btnAgregar.clicked.connect(self.click_agregar)
         self.ui.btnClasificar.clicked.connect(self.click_clasificar)
 
         # Creamos neurona, entrada y learning rate
         self.neuron = Perceptron()
 
 
-    @pyqtSlot()
-    def click_agregar(self):
+    def agregar(self):
         try:
             # Primer punto? limpiamos plot
             if len(self.entradas) == 0:
@@ -65,21 +65,14 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot()
     def click_clasificar(self):
+
+        # validamos que existe el archivo
+        print("Archivo seleccionado: {}".format(self.ui.txtArchivo.text()))
+        # leemos y definimos X y Y desde archivos
+        X,Y = self.leerEntradas()
+
         # # Creamos neurona, entrada y learning rate
         # neuron = Perceptron(2, 0.1) 
-
-        # Creamos matriz de entradas de 2 filas y n columnas
-        # n es el numero puntos agregados
-        X = np.zeros(shape=(2,len(self.salidas)))
-        # print("X: ", X)
-        for i in range(len(self.entradas[0])):
-            for j in range(len(self.salidas)):
-                X[i,j] = self.entradas[j][i]
-        print("X: ", X)
-
-        # Matriz de salidas deseadas (1 por cada par de entradas)
-        Y = np.array(self.salidas)
-        print("Y: ", Y)
 
         # neurona aprende e imprime resultados
         print("Pre entrenamiento: ",self.neuron.predict(X))
@@ -91,5 +84,53 @@ class MainWindow(QMainWindow):
         self.salidas = []
         
 
+    def leerEntradas(self):
         
+        with open("entradas.csv", 'r') as file:
+            lines = file.readlines()
+        
+        lines = self.limpiarSaltos(lines) # limpiar saltos de linea
+        print(lines)
+
+        # Creamos matriz de entradas de n filas y m columnas 
+        # n es el numero de combinaciones 
+        # m es el numero de entradas
+        X = np.zeros(shape=(len(lines),lines[0].count(",")+1))
+
+        for i,line in enumerate(lines):
+            for j,column in enumerate(line.split(",")):
+                X[i,j] = float(column)
+
+        print("X: ", X.transpose())
+
+        with open("salidas.csv", 'r') as file:
+            lines = file.readlines()
+
+        lines = self.limpiarSaltos(lines)
+        # print(lines[0].split(","))
+        print(lines)
+        Y = np.zeros(shape=(len(lines),lines[0].count(",")+1))
+
+        for i,line in enumerate(lines):
+            for j,column in enumerate(line.split(",")):
+                # print("estados: ",i,j)
+                Y[i,j] = float(column)
+        
+        Y = Y.transpose()
+
+        # Matriz de salidas deseadas (1 por cada par de entradas)
+        print("Y: ", Y)
+
+
+        return X.transpose(),Y[0]
  
+
+    # Recibe una lista de lineas,
+    # Retorna la lista de lineas sin los saltos de linea finales
+    def limpiarSaltos(self, lineas):
+        for i in range(len(lineas)):
+            # si es igual a ascii de salto de linea, elimina
+            if lineas[i][-1] == chr(10):
+                lineas[i] = lineas[i][:-1]
+
+        return lineas

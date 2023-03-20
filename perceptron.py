@@ -91,9 +91,9 @@ class Perceptron:
                 self.b = self.b + self.eta * (Y[i] - y_est)
 
                 # actualizacion en UI
-                ui.txtW1.setText(str(round(self.w[0], 6)))
-                ui.txtW2.setText(str(round(self.w[1], 6)))
-                ui.txtTheta.setText(str(-round(self.b[0], 6)))
+                # ui.txtW1.setText(str(round(self.w[0], 6)))
+                # ui.txtW2.setText(str(round(self.w[1], 6)))
+                # ui.txtTheta.setText(str(-round(self.b[0], 6)))
 
             # limpiar
             plt.cla()

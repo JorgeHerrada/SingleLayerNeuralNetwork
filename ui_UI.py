@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'UI.ui'
+# Form implementation generated from reading ui file 'c:\Users\toluc\OneDrive\Documentos\Jorge\INCO\10mo\SEM Inteligencia Artificial  2 - Julio\Practica_4_Red_Unicapa\UI.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -27,7 +27,7 @@ class Ui_MainWindow(object):
         self.label.setGeometry(QtCore.QRect(0, 0, 691, 571))
         self.label.setTabletTracking(False)
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap("../prueba.png"))
+        self.label.setPixmap(QtGui.QPixmap("c:\\Users\\toluc\\OneDrive\\Documentos\\Jorge\\INCO\\10mo\\SEM Inteligencia Artificial  2 - Julio\\Practica_4_Red_Unicapa\\../prueba.png"))
         self.label.setScaledContents(True)
         self.label.setObjectName("label")
         self.lblNombre = QtWidgets.QLabel(self.centralwidget)
@@ -63,13 +63,3 @@ class Ui_MainWindow(object):
         self.btnClasificar.setText(_translate("MainWindow", "Clasificar"))
         self.lblNombre.setText(_translate("MainWindow", "Herrada Serrano Jorge Luis"))
         self.txtArchivo.setText(_translate("MainWindow", "Sin archivo seleccionado"))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
