@@ -5,7 +5,7 @@ from graficador import Graficafor
 from PyQt5 import QtGui
 
 
-class Perceptron:
+class Red:
     # defininmos limite de de epocas para evitar 
     # bucles infinitos en caso de que los puntos 
     # insertados no sean linealmente separables 
