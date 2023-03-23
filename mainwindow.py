@@ -40,7 +40,7 @@ class MainWindow(QMainWindow):
         # red aprende e imprime resultados
         # print("Pre entrenamiento: ",self.red.predict(X))
         self.red.fit(X, Y, self.ui)
-        print("Post entrenamiento: ",self.red.predict(X))
+        print("Post entrenamiento: \n",self.red.predict(X))
 
         # limpiamos
         # self.entradas = []

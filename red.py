@@ -149,8 +149,11 @@ class Red:
         print("estimaciones: ", estimaciones)
 
         for i in range(len(estimaciones)):
-            if Y.transpose()[i].tolist()[0] != estimaciones[i]:
+            print("Y.transpuesta()[i].tolist(): \n",Y.transpose()[i].tolist())
+            print("Estimacion[i]: \n",estimaciones[i])
+            if Y.transpose()[i].tolist() != estimaciones[i]:
                 return False
+        print("Se alcanzó el objetivo ALVVV!")
         return True
 
     # calcular punto para pendiente
