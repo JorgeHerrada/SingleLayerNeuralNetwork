@@ -28,15 +28,17 @@ class MainWindow(QMainWindow):
         self.red.clear()
 
         # validamos que existe el archivo
-        print("Archivo seleccionado: {}".format(self.ui.txtArchivo.text()))
+        # print("Archivo seleccionado: {}".format(self.ui.txtArchivo.text()))
+        print("Archivo seleccionado: entradas1.csv")
         # leemos y definimos X y Y desde archivos
-        X,Y = self.leerEntradasSalidas(self.ui.txtArchivo.text())
+        # X,Y = self.leerEntradasSalidas(self.ui.txtArchivo.text())
+        X,Y = self.leerEntradasSalidas("entradas1.csv") # PRUEBAS
 
         # # Creamos neurona, entrada y learning rate
         # neuron = Perceptron(2, 0.1) 
 
         # red aprende e imprime resultados
-        print("Pre entrenamiento: ",self.red.predict(X))
+        # print("Pre entrenamiento: ",self.red.predict(X))
         self.red.fit(X, Y, self.ui)
         print("Post entrenamiento: ",self.red.predict(X))
 
@@ -64,7 +66,7 @@ class MainWindow(QMainWindow):
 
         print("X: \n", X.transpose())
 
-        nombreArchivoSalidas = "salidas.csv"
+        nombreArchivoSalidas = "salidas1.csv"
 
         with open(nombreArchivoSalidas, 'r') as file:
             lines = file.readlines()

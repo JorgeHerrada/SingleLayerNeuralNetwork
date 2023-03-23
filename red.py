@@ -30,32 +30,42 @@ class Red:
 
     # funcion de activacion perceptrón
     def f_activacion(self, nums):
-        vector = []
-        for num in nums:
-            if num >= 0:
-                vector.append(1)
-            else:
-                vector.append(0)
+        salida = np.zeros(shape=nums.shape)
+        for i in range(nums.shape[0]):
+            for j in range(nums.shape[1]):
+                if nums[i,j] >= 0:
+                    salida[i,j] = 1
+                else:
+                    salida[i,j] = 0
         
-        return vector
+        return salida
 
     # Entrega un vector de salidas, dada una matriz de
     # entradas para la neurona
 
     def predict(self, X):
 
-        # p es el numero de columnas en la matriz X
-        # p = X.shape[1]
+        # nPatrones = # de colmunas en la matriz X (candidad de patrones de entrenamiento)
+        nPatrones = X.shape[1]
+        print("nPatrones: \n{}\nX: {}".format(nPatrones,X))
+        # neuronas = cantidad de neuronas
+        nNeuronas = self.b.shape[1]
+        print("nNeuronas: \n{}\nBias: {}".format(nNeuronas,self.b))
 
         # y_est guardará la salidas, se inicializa
-        # como vector de p dimensiones con 0s
-        # y_est = np.zeros(p)
+        # como matriz de numNeuronas * nPatrones
+        y_est = np.zeros(shape=(nNeuronas,nPatrones))
+        print("y_est inicializado: \n{}".format(y_est))
 
-        # Producto punto del array de pesos y matriz de entradas (w * X) + bias
-        y_est = np.dot(self.w,X) + self.b
-
+        # Producto punto de la matriz de pesos y matriz de entradas (w * X) + bias
+        # dot() realiza el producto punto de cada fila en W contra toda la matriz X (nNeuronas veces)
+        # Acomoda cada resultado en una matriz de nNeuronas * nPatrones
+        # el bias se transpone para ser vector columna y sumarse a la fila correspondiente de la matriz y_est
+        y_est = np.dot(self.w,X) + self.b.transpose()
+        print("Producto punto: \n",y_est)
         # mandamos salida estimada a funcion de activación
         y_est = self.f_activacion(y_est)
+        print("Funcion de activacion, y_est: \n",y_est)
 
         # retornamos vector con las salidas binarias
         return y_est
@@ -64,10 +74,22 @@ class Red:
     # puntos y division en grafica
     def fit(self, X, Y, ui, epoch=EPOCH):
 
+        #****************Inicializamos pesos y bias*****************
+
+        # creamos matriz de pesos W. 1 fila por neurona y 1 columna por cada entrada 
+        self.w = (-1 + (1 - (-1)) * np.random.rand(X.shape[0],Y.shape[0])).transpose()
+        print("Pesos W:\n",self.w)
+
+        # creamos vector de bias b. 1 elemento por cada neurona
+        self.b = np.random.rand(1,Y.shape[0])
+        print("Bias: ",self.b)
+        
         # p es el numero de conjuntos de entrada (patron)
         p = X.shape[1]
+
         # lista para comparar estimaciones con resultados esperados
-        estimaciones = []   
+        estimaciones = []
+        # estimaciones = [[],[]]
         self.contEpoch = 0  
 
         # iteramos por cada epoca
@@ -78,25 +100,28 @@ class Red:
 
             # iteramos por cada patron de entrenamiento
             for i in range(p):
+                print("Epoca: {}.{}".format(self.contEpoch,i))
 
                 # calculamos salida dado el patron actual
-                # reshape para asegurar que tenemos vector columna
+                # reshape para asegurar que tenemos vector columna porque ese slicing retorna vector regular
                 y_est = self.predict(X[:, i].reshape(-1, 1))
-                # print("y_est: ",y_est)
-                estimaciones.append(y_est[0]) #guardamos estimacion
-                # y_est en este caso es una lista de 1 elemento, guardamos el indice 0
-
+                print("y_est: ",y_est)
+                estimaciones.append(y_est.transpose()) #guardamos estimacion
+                
                 # actualizacion de peso y bias basado en el error
-                self.w = self.w + self.eta * (Y[i] - y_est) * X[:, i]
-                self.b = self.b + self.eta * (Y[i] - y_est)
-
-                # actualizacion en UI
-                # ui.txtW1.setText(str(round(self.w[0], 6)))
-                # ui.txtW2.setText(str(round(self.w[1], 6)))
-                # ui.txtTheta.setText(str(-round(self.b[0], 6)))
+                print("W antes: \n{} \nBias antes: {}".format(self.w,self.b))
+                self.w = self.w + self.eta * (Y[:,i].reshape(-1,1) - y_est) * X[:, i]
+                self.b = self.b + self.eta * (Y[:,i].reshape(-1,1) - y_est).transpose() 
+                print("W despues: \n{} \nBias despues: {}".format(self.w,self.b))
+                # checar si es necesario hacer reshape del X[:,i]
 
             # limpiar
             plt.cla()
+
+            # formatear estimaciones
+            print("Estimaciones antes: \n",estimaciones)
+            estimaciones = self.formatearEstimaciones(estimaciones)
+            print("Estimaciones despues: \n",estimaciones)
 
             # plottear puntos a color
             self.graficador.plotMatrix(X, estimaciones)
@@ -153,6 +178,19 @@ class Red:
     def guardarActualizar(self, ui):
         plt.savefig("prueba.png")
         ui.label.setPixmap(QtGui.QPixmap("prueba.png"))
+
+
+    # retorna lista de estimaciones formateada
+    def formatearEstimaciones(self, estimaciones):
+        
+        newEstimacion = [] # lista con las estimaciones formateadas
+
+        # convertimos numpy array to list
+        for array in estimaciones:
+            newEstimacion.append(array.tolist()[0])
+
+        return newEstimacion
+            
 
     # limpia puntos viejos y reinicia pesos y bias
     def clear(self, n_input=2, learning_rate=0.1):
