@@ -124,17 +124,18 @@ class Red:
             print("Estimaciones despues: \n",estimaciones)
 
             # plottear puntos a color
-            self.graficador.plotMatrix(X, estimaciones)
+            # self.graficador.plotMatrix(X, estimaciones)
 
             # plottear linea
-            self.graficador.drawDivision([self.punto(self.w[0], self.w[1], -self.b, -5),
-                                          self.punto(self.w[0], self.w[1], -self.b, 5)],)
+            # self.graficador.drawDivision([self.punto(self.w[0], self.w[1], -self.b, -5),
+            #                               self.punto(self.w[0], self.w[1], -self.b, 5)],)
 
             # actualizar
-            self.guardarActualizar(ui)
+            # self.guardarActualizar(ui)
 
             # se logró el objetivo?
             if self.aprendizajeTerminado(Y, estimaciones):
+                print("X: \n{} \nY: \n{} \n Estimaciones: \n{}".format(X,Y,estimaciones))
                 break
 
             # retraso para visualizar
@@ -148,7 +149,7 @@ class Red:
         print("estimaciones: ", estimaciones)
 
         for i in range(len(estimaciones)):
-            if Y[i] != estimaciones[i]:
+            if Y.transpose()[i].tolist()[0] != estimaciones[i]:
                 return False
         return True
 
