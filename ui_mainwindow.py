@@ -38,13 +38,20 @@ class Ui_MainWindow(object):
         self.lblNombre.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.lblNombre.setAlignment(QtCore.Qt.AlignCenter)
         self.lblNombre.setObjectName("lblNombre")
-        self.txtArchivo = QtWidgets.QLineEdit(self.centralwidget)
-        self.txtArchivo.setGeometry(QtCore.QRect(780, 400, 281, 51))
+        self.txtEntrada = QtWidgets.QLineEdit(self.centralwidget)
+        self.txtEntrada.setGeometry(QtCore.QRect(780, 330, 281, 51))
         font = QtGui.QFont()
-        font.setPointSize(10)
-        self.txtArchivo.setFont(font)
-        self.txtArchivo.setAlignment(QtCore.Qt.AlignCenter)
-        self.txtArchivo.setObjectName("txtArchivo")
+        font.setPointSize(14)
+        self.txtEntrada.setFont(font)
+        self.txtEntrada.setAlignment(QtCore.Qt.AlignCenter)
+        self.txtEntrada.setObjectName("txtEntrada")
+        self.txtSalida = QtWidgets.QLineEdit(self.centralwidget)
+        self.txtSalida.setGeometry(QtCore.QRect(780, 410, 281, 51))
+        font = QtGui.QFont()
+        font.setPointSize(14)
+        self.txtSalida.setFont(font)
+        self.txtSalida.setAlignment(QtCore.Qt.AlignCenter)
+        self.txtSalida.setObjectName("txtSalida")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1115, 26))
@@ -56,13 +63,16 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        MainWindow.setTabOrder(self.btnClasificar, self.txtEntrada)
+        MainWindow.setTabOrder(self.txtEntrada, self.txtSalida)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Red Neuronal Unicapa"))
         self.btnClasificar.setText(_translate("MainWindow", "Clasificar"))
         self.lblNombre.setText(_translate("MainWindow", "Herrada Serrano Jorge Luis"))
-        self.txtArchivo.setText(_translate("MainWindow", "entradas.csv"))
+        self.txtEntrada.setText(_translate("MainWindow", "entradas1.csv"))
+        self.txtSalida.setText(_translate("MainWindow", "salidas1.csv"))
 
 
 if __name__ == "__main__":

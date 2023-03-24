@@ -78,22 +78,43 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLineEdit" name="txtArchivo">
+   <widget class="QLineEdit" name="txtEntrada">
     <property name="geometry">
      <rect>
       <x>780</x>
-      <y>400</y>
+      <y>330</y>
       <width>281</width>
       <height>51</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
+      <pointsize>14</pointsize>
      </font>
     </property>
     <property name="text">
-     <string>entradas.csv</string>
+     <string>entradas1.csv</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="txtSalida">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>410</y>
+      <width>281</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>salidas1.csv</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -114,6 +135,8 @@
  </widget>
  <tabstops>
   <tabstop>btnClasificar</tabstop>
+  <tabstop>txtEntrada</tabstop>
+  <tabstop>txtSalida</tabstop>
  </tabstops>
  <resources/>
  <connections/>
