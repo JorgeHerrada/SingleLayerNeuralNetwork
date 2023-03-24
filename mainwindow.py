@@ -90,11 +90,7 @@ class MainWindow(QMainWindow):
         # Matriz de salidas deseadas (1 por cada par de entradas)
         print("Y: \n", Y)
 
-        # cuando Y es solo un patrón 
-        if len(Y) <= 1:
-            return X.transpose(),Y[0]
-        else:
-            return X.transpose(),Y
+        return X.transpose(),Y
 
  
     # def agregar(self):
