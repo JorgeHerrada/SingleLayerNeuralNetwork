@@ -54,24 +54,21 @@ class Graficafor:
         # Create figure 
         self.fig, self.ax = plt.subplots(figsize=(10, 10))
         
-    # plotteamos punto 
-    def setPunto(self, x, y, _color, size,nColores):
-        # imprime punto en coordenada x,y
-        # usa un color distribuido segun el numero de colores 
-        # self.ax.scatter(x, y, color=[int((100/nColores-1)*_color)],cmap='viridis', s=size)
-        self.ax.scatter(x, y, color="#" + str(hex(int((0xffffff/nColores)*_color+1)))[2:], cmap='viridis', s=size)
     
     # plotmatriz
     def plotMatrix(self,X,Y):
-        # calculamos colores posibles segun el numero de 
-        # neuronas usando formula: "1 + ((n*(n+1))/2)"
-        # nColores = 1 + (Y.shape[0]*(Y.shape[0]+1))/2 
+        
         nColores = len(Y)
         dicColores = {}
         colorList = []
+        # agregamos las combinaciones de las salidas Y como llave a un diccionario 
+        # y les asignamos un numero en rango[0,nColores-1] como valor
+        # garantiza mismo valor para patrones repetidos en Y
         for opc in range(nColores):
             dicColores[str(Y[opc])] = opc
             
+        # el valor del patron se usa para calcular 
+        # un numero en rango [0,100] 
         for e in Y:
             colorList.append( int( ( 100 / (nColores-1)) * dicColores[str(e)]))
 
@@ -80,11 +77,9 @@ class Graficafor:
         print("Dic Colores: ",dicColores)
         print("ColorList: ",colorList)
 
-        self.ax.scatter(X[0],X[1],c=colorList,cmap="viridis",s=300)
+        # ploteamos todos los puntos en x,y con su color asignago en colorList
+        self.ax.scatter(X[0],X[1],c=colorList,cmap="nipy_spectral",s=300)
 
-        # X transpuesto
-        # for i,x in enumerate(np.transpose(X),0):
-        #     self.setPunto(x[0],x[1],dicColores[str(Y[i])],300,nColores)
 
 
 
