@@ -9,7 +9,7 @@ class Red:
     # defininmos limite de de epocas para evitar 
     # bucles infinitos en caso de que los puntos 
     # insertados no sean linealmente separables 
-    EPOCH = 30
+    EPOCH = 50
     LEARN_RATE = 0.1 # learning rate
     N_INPUT = 2 # dimension de los patrones de entrenamiento
     
@@ -133,10 +133,12 @@ class Red:
 
             # plottear puntos a color
             self.graficador.plotMatrix(X, estimaciones)
-
+            
             # plottear linea
-            # self.graficador.drawDivision([self.punto(self.w[0], self.w[1], -self.b, -5),
-            #                               self.punto(self.w[0], self.w[1], -self.b, 5)],)
+            for i in range(len(self.w)):
+                self.graficador.drawDivision([self.punto(self.w[i,0], self.w[i,1], -self.b[0,i], -5),
+                                            self.punto(self.w[i,0], self.w[i,1], -self.b[0,i], 5)],)
+
 
             # actualizar
             self.guardarActualizar(ui)
