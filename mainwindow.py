@@ -27,29 +27,33 @@ class MainWindow(QMainWindow):
         #limpiamos pesos, bias y plots
         self.red.clear()
 
-        # validamos que existe el archivo
-        # print("Archivo seleccionado: {}".format(self.ui.txtArchivo.text()))
-        print("Archivo seleccionado: entradas1.csv")
-        # leemos y definimos X y Y desde archivos
-        # X,Y = self.leerEntradasSalidas(self.ui.txtArchivo.text())
-        X,Y = self.leerEntradasSalidas("entradas1.csv") # PRUEBAS
-
-        # # Creamos neurona, entrada y learning rate
-        # neuron = Perceptron(2, 0.1) 
+        try:
+            # validamos que existe el archivo
+            print("Archivo entrada: {}".format(self.ui.txtEntrada.text()))
+            print("Archivo salida: {}".format(self.ui.txtSalida.text()))
+            # print("Archivo seleccionado: entradas1.csv")
+            # leemos y definimos X y Y desde archivos
+            X,Y = self.leerEntradasSalidas(self.ui.txtEntrada.text(),self.ui.txtSalida.text())
+            # X,Y = self.leerEntradasSalidas("entradas1.csv") # PRUEBAS
+        except:
+            print("ERROR con los archivos. Revisa que los archivos existen.")
+            return
 
         # red aprende e imprime resultados
         # print("Pre entrenamiento: ",self.red.predict(X))
         self.red.fit(X, Y, self.ui)
         print("Post entrenamiento: \n",self.red.predict(X))
+        print("Pesos W: \n",self.red.w)
+        print("Y esperada: \n",Y)
 
         # limpiamos
         # self.entradas = []
         # self.salidas = []
         
 
-    def leerEntradasSalidas(self,nombreArchivo):
+    def leerEntradasSalidas(self,entrada,salida):
         
-        with open(nombreArchivo, 'r') as file:
+        with open(entrada, 'r') as file:
             lines = file.readlines()
         
         lines = self.limpiarSaltos(lines) # limpiar saltos de linea
@@ -66,9 +70,9 @@ class MainWindow(QMainWindow):
 
         print("X: \n", X.transpose())
 
-        nombreArchivoSalidas = "salidas1.csv"
+        # nombreArchivoSalidas = "salidas1.csv"
 
-        with open(nombreArchivoSalidas, 'r') as file:
+        with open(salida, 'r') as file:
             lines = file.readlines()
 
         lines = self.limpiarSaltos(lines)

@@ -55,21 +55,38 @@ class Graficafor:
         self.fig, self.ax = plt.subplots(figsize=(10, 10))
         
     # plotteamos punto 
-    def setPunto(self, x, y, _color, size=300):
-        if _color== 1:
-            self.ax.scatter(x, y, color="green", s=size)
-        else:
-            self.ax.scatter(x, y, color="blue", s=size)
+    def setPunto(self, x, y, _color, size,nColores):
+        # imprime punto en coordenada x,y
+        # usa un color distribuido segun el numero de colores 
+        # self.ax.scatter(x, y, color=[int((100/nColores-1)*_color)],cmap='viridis', s=size)
+        self.ax.scatter(x, y, color="#" + str(hex(int((0xffffff/nColores)*_color+1)))[2:], cmap='viridis', s=size)
     
     # plotmatriz
     def plotMatrix(self,X,Y):
+        # calculamos colores posibles segun el numero de 
+        # neuronas usando formula: "1 + ((n*(n+1))/2)"
+        # nColores = 1 + (Y.shape[0]*(Y.shape[0]+1))/2 
+        nColores = len(Y)
+        dicColores = {}
+        colorList = []
+        for opc in range(nColores):
+            dicColores[str(Y[opc])] = opc
+            
+        for e in Y:
+            colorList.append( int( ( 100 / (nColores-1)) * dicColores[str(e)]))
+
+        # colorList = np.array(colorList)
+        
+        print("Dic Colores: ",dicColores)
+        print("ColorList: ",colorList)
+
+        self.ax.scatter(X[0],X[1],c=colorList,cmap="viridis",s=300)
 
         # X transpuesto
-        for x, y in zip(np.transpose(X), Y):
-            if y == 1:
-                self.setPunto(x[0],x[1],1)
-            else:
-                self.setPunto(x[0],x[1],0)
+        # for i,x in enumerate(np.transpose(X),0):
+        #     self.setPunto(x[0],x[1],dicColores[str(Y[i])],300,nColores)
+
+
 
     # plotteamos linea 
     def drawDivision(self, pts, _color="r"):

@@ -9,7 +9,7 @@ class Red:
     # defininmos limite de de epocas para evitar 
     # bucles infinitos en caso de que los puntos 
     # insertados no sean linealmente separables 
-    EPOCH = 100
+    EPOCH = 30
     LEARN_RATE = 0.1 # learning rate
     N_INPUT = 2 # dimension de los patrones de entrenamiento
     
@@ -29,6 +29,8 @@ class Red:
         self.graficador = Graficafor()
 
     # funcion de activacion perceptrón
+    # recibe una matriz de cualquier dimension y 
+    # retorna una igual con [0,1]
     def f_activacion(self, nums):
         salida = np.zeros(shape=nums.shape)
         for i in range(nums.shape[0]):
@@ -40,20 +42,21 @@ class Red:
         
         return salida
 
+
     # Entrega un vector de salidas, dada una matriz de
     # entradas para la neurona
-
     def predict(self, X):
 
         # nPatrones = # de colmunas en la matriz X (candidad de patrones de entrenamiento)
         nPatrones = X.shape[1]
-        print("nPatrones: \n{}\nX: {}".format(nPatrones,X))
+        print("nPatrones: \n{}\nX: \n{}".format(nPatrones,X))
+        
         # neuronas = cantidad de neuronas
         nNeuronas = self.b.shape[1]
-        print("nNeuronas: \n{}\nBias: {}".format(nNeuronas,self.b))
+        print("nNeuronas: \n{}\nBias: \n{}".format(nNeuronas,self.b))
 
         # y_est guardará la salidas, se inicializa
-        # como matriz de numNeuronas * nPatrones
+        # como matriz de numNeuronas * nPatrones en 0s
         y_est = np.zeros(shape=(nNeuronas,nPatrones))
         print("y_est inicializado: \n{}".format(y_est))
 
@@ -63,6 +66,7 @@ class Red:
         # el bias se transpone para ser vector columna y sumarse a la fila correspondiente de la matriz y_est
         y_est = np.dot(self.w,X) + self.b.transpose()
         print("Producto punto: \n",y_est)
+
         # mandamos salida estimada a funcion de activación
         y_est = self.f_activacion(y_est)
         print("Funcion de activacion, y_est: \n",y_est)
@@ -70,11 +74,12 @@ class Red:
         # retornamos vector con las salidas binarias
         return y_est
 
+
     # Realiza aprendizaje en epocas, actualiza 
     # puntos y division en grafica
     def fit(self, X, Y, ui, epoch=EPOCH):
 
-        #****************Inicializamos pesos y bias*****************
+        #**************** Inicializamos pesos y bias *****************
 
         # creamos matriz de pesos W. 1 fila por neurona y 1 columna por cada entrada 
         self.w = (-1 + (1 - (-1)) * np.random.rand(X.shape[0],Y.shape[0])).transpose()
@@ -83,13 +88,16 @@ class Red:
         # creamos vector de bias b. 1 elemento por cada neurona
         self.b = np.random.rand(1,Y.shape[0])
         print("Bias: ",self.b)
+
+        # numero de lineas a plottear
+        nLineas = self.b.shape[1]
         
-        # p es el numero de conjuntos de entrada (patron)
-        p = X.shape[1]
+        # nPatrones = numero de conjuntos de entrada (patrones)
+        nPatrones = X.shape[1]
 
         # lista para comparar estimaciones con resultados esperados
         estimaciones = []
-        # estimaciones = [[],[]]
+        
         self.contEpoch = 0  
 
         # iteramos por cada epoca
@@ -99,7 +107,7 @@ class Red:
             self.contEpoch += 1
 
             # iteramos por cada patron de entrenamiento
-            for i in range(p):
+            for i in range(nPatrones):
                 print("Epoca: {}.{}".format(self.contEpoch,i))
 
                 # calculamos salida dado el patron actual
@@ -124,14 +132,14 @@ class Red:
             print("Estimaciones despues: \n",estimaciones)
 
             # plottear puntos a color
-            # self.graficador.plotMatrix(X, estimaciones)
+            self.graficador.plotMatrix(X, estimaciones)
 
             # plottear linea
             # self.graficador.drawDivision([self.punto(self.w[0], self.w[1], -self.b, -5),
             #                               self.punto(self.w[0], self.w[1], -self.b, 5)],)
 
             # actualizar
-            # self.guardarActualizar(ui)
+            self.guardarActualizar(ui)
 
             # se logró el objetivo?
             if self.aprendizajeTerminado(Y, estimaciones):
@@ -149,11 +157,11 @@ class Red:
         print("estimaciones: ", estimaciones)
 
         for i in range(len(estimaciones)):
-            print("Y.transpuesta()[i].tolist(): \n",Y.transpose()[i].tolist())
-            print("Estimacion[i]: \n",estimaciones[i])
+            # print("Y.transpuesta()[i].tolist(): \n",Y.transpose()[i].tolist())
+            # print("Estimacion[i]: \n",estimaciones[i])
             if Y.transpose()[i].tolist() != estimaciones[i]:
                 return False
-        print("Se alcanzó el objetivo ALVVV!")
+        print("*******************Se alcanzó el objetivo ALVVV!************************")
         return True
 
     # calcular punto para pendiente
