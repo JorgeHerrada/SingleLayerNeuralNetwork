@@ -79,6 +79,7 @@ class Graficafor:
 
         # ploteamos todos los puntos en x,y con su color asignago en colorList
         self.ax.scatter(X[0],X[1],c=colorList,cmap="nipy_spectral",s=300)
+        self.ax.set_ylim([-5, 5])
 
 
 
