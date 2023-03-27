@@ -46,6 +46,12 @@ class MainWindow(QMainWindow):
         print("Pesos W: \n",self.red.w)
         print("Y esperada: \n",Y)
 
+        # plottear linea
+        for i in range(len(self.red.w)):
+            self.red.graficador.drawDivision([self.red.punto(self.red.w[i,0], self.red.w[i,1], -self.red.b[0,i], -5),
+                                        self.red.punto(self.red.w[i,0], self.red.w[i,1], -self.red.b[0,i], 5)],)
+
+
         # limpiamos
         # self.entradas = []
         # self.salidas = []
@@ -91,47 +97,6 @@ class MainWindow(QMainWindow):
         print("Y: \n", Y)
 
         return X.transpose(),Y
-
- 
-    # def agregar(self):
-        try:
-            # Primer punto? limpiamos plot
-            if len(self.entradas) == 0:
-                self.neuron.clear()
-
-            # hay texto en las cajas?
-            if self.ui.txtX1.text() != "" and self.ui.txtX2.text() != "":
-                # guardamos guardamos entradas (x1,x2) y salidas (y)
-                self.entradas.append([float(self.ui.txtX1.text()),float(self.ui.txtX2.text())])
-                print("entradas: ",self.entradas)
-
-                # Ploteamos punto agregado en coordenada y color correspondiente
-                if self.ui.checkBox.checkState():
-                    # agregamos 1 a la lista de salidas deseadas 
-                    self.salidas.append(1)
-                    
-                    # PLOTTEAR
-                    self.neuron.graficador.setPunto(self.entradas[-1][0],self.entradas[-1][1],1)
-                else:
-                    # agregamos 0 a la lista de salidas deseadas 
-                    self.salidas.append(0)
-
-                    # PLOTTEAR
-                    self.neuron.graficador.setPunto(self.entradas[-1][0],self.entradas[-1][1],0)
-                # print("Salidas: ", self.salidas)
-            else:
-                print("Entrada invalida")
-            
-            # actualizar UI
-            # print("apunto de guardarActualizar")
-            self.neuron.guardarActualizar(self.ui)
-
-            # limpiar 
-            self.ui.txtX1.setText("")
-            self.ui.txtX2.setText("")
-
-        except ValueError:
-            print("¡Error en la entrada! - ",ValueError)
 
     # Recibe una lista de lineas,
     # Retorna la lista de lineas sin los saltos de linea finales
