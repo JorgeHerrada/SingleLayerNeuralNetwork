@@ -6,15 +6,14 @@ from PyQt5 import QtGui
 
 
 class Red:
-    # defininmos limite de de epocas para evitar 
-    # bucles infinitos en caso de que los puntos 
-    # insertados no sean linealmente separables 
+    # defininmos limite de de epocas para evitar
+    # bucles infinitos en caso de que los puntos
+    # insertados no sean linealmente separables
     EPOCH = 50
-    LEARN_RATE = 0.1 # learning rate
-    N_INPUT = 2 # dimension de los patrones de entrenamiento
-    
+    LEARN_RATE = 0.1  # learning rate
+    N_INPUT = 2  # dimension de los patrones de entrenamiento
 
-    contEpoch = 0 # contador de epocas
+    contEpoch = 0  # contador de epocas
 
     # Constructor toma numero de inputs y learning rate
     def __init__(self, n_input=N_INPUT, learning_rate=LEARN_RATE):
@@ -28,77 +27,77 @@ class Red:
         self.clear(n_input, learning_rate)
         self.graficador = Graficafor()
 
-    # funcion de activacion perceptrón
-    # recibe una matriz de cualquier dimension y 
+    # funcion de activacion escal
+    # recibe una matriz de cualquier dimension y
     # retorna una igual con [0,1]
     def f_activacion(self, nums):
         salida = np.zeros(shape=nums.shape)
         for i in range(nums.shape[0]):
             for j in range(nums.shape[1]):
-                if nums[i,j] >= 0:
-                    salida[i,j] = 1
+                if nums[i, j] >= 0:
+                    salida[i, j] = 1
                 else:
-                    salida[i,j] = 0
-        
-        return salida
+                    salida[i, j] = 0
 
+        return salida
 
     # Entrega un vector de salidas, dada una matriz de
     # entradas para la neurona
+
     def predict(self, X):
 
         # nPatrones = # de colmunas en la matriz X (candidad de patrones de entrenamiento)
         nPatrones = X.shape[1]
-        print("nPatrones: \n{}\nX: \n{}".format(nPatrones,X))
-        
+        print("nPatrones: \n{}\nX: \n{}".format(nPatrones, X))
+
         # neuronas = cantidad de neuronas
         nNeuronas = self.b.shape[1]
-        print("nNeuronas: \n{}\nBias: \n{}".format(nNeuronas,self.b))
+        print("nNeuronas: \n{}\nBias: \n{}".format(nNeuronas, self.b))
 
         # y_est guardará la salidas, se inicializa
         # como matriz de numNeuronas * nPatrones en 0s
-        y_est = np.zeros(shape=(nNeuronas,nPatrones))
+        y_est = np.zeros(shape=(nNeuronas, nPatrones))
         print("y_est inicializado: \n{}".format(y_est))
 
         # Producto punto de la matriz de pesos y matriz de entradas (w * X) + bias
         # dot() realiza el producto punto de cada fila en W contra toda la matriz X (nNeuronas veces)
         # Acomoda cada resultado en una matriz de nNeuronas * nPatrones
         # el bias se transpone para ser vector columna y sumarse a la fila correspondiente de la matriz y_est
-        y_est = np.dot(self.w,X) + self.b.transpose()
-        print("Producto punto: \n",y_est)
+        y_est = np.dot(self.w, X) + self.b.transpose()
+        print("Producto punto: \n", y_est)
 
         # mandamos salida estimada a funcion de activación
         y_est = self.f_activacion(y_est)
-        print("Funcion de activacion, y_est: \n",y_est)
+        print("Funcion de activacion, y_est: \n", y_est)
 
         # retornamos vector con las salidas binarias
         return y_est
 
-
-    # Realiza aprendizaje en epocas, actualiza 
+    # Realiza aprendizaje en epocas, actualiza
     # puntos y division en grafica
     def fit(self, X, Y, ui, epoch=EPOCH):
 
-        #**************** Inicializamos pesos y bias *****************
+        # **************** Inicializamos pesos y bias *****************
 
-        # creamos matriz de pesos W. 1 fila por neurona y 1 columna por cada entrada 
-        self.w = (-1 + (1 - (-1)) * np.random.rand(X.shape[0],Y.shape[0])).transpose()
-        print("Pesos W:\n",self.w)
+        # creamos matriz de pesos W. 1 fila por neurona y 1 columna por cada entrada
+        self.w = (-1 + (1 - (-1)) *
+                  np.random.rand(X.shape[0], Y.shape[0])).transpose()
+        print("Pesos W:\n", self.w)
 
         # creamos vector de bias b. 1 elemento por cada neurona
-        self.b = np.random.rand(1,Y.shape[0])
-        print("Bias: ",self.b)
+        self.b = np.random.rand(1, Y.shape[0])
+        print("Bias: ", self.b)
 
         # numero de lineas a plottear
         nLineas = self.b.shape[1]
-        
+
         # nPatrones = numero de conjuntos de entrada (patrones)
         nPatrones = X.shape[1]
 
         # lista para comparar estimaciones con resultados esperados
         estimaciones = []
-        
-        self.contEpoch = 0  
+
+        self.contEpoch = 0
 
         # iteramos por cada epoca
         for _ in range(epoch):
@@ -108,44 +107,46 @@ class Red:
 
             # iteramos por cada patron de entrenamiento
             for i in range(nPatrones):
-                print("Epoca: {}.{}".format(self.contEpoch,i))
+                print("Epoca: {}.{}".format(self.contEpoch, i))
 
                 # calculamos salida dado el patron actual
                 # reshape para asegurar que tenemos vector columna porque ese slicing retorna vector regular
                 y_est = self.predict(X[:, i].reshape(-1, 1))
-                print("y_est: ",y_est)
-                estimaciones.append(y_est.transpose()) #guardamos estimacion
-                
+                print("y_est: ", y_est)
+                estimaciones.append(y_est.transpose())  # guardamos estimacion
+
                 # actualizacion de peso y bias basado en el error
-                print("W antes: \n{} \nBias antes: {}".format(self.w,self.b))
-                self.w = self.w + self.eta * (Y[:,i].reshape(-1,1) - y_est) * X[:, i]
-                self.b = self.b + self.eta * (Y[:,i].reshape(-1,1) - y_est).transpose() 
-                print("W despues: \n{} \nBias despues: {}".format(self.w,self.b))
+                print("W antes: \n{} \nBias antes: {}".format(self.w, self.b))
+                self.w = self.w + self.eta * \
+                    (Y[:, i].reshape(-1, 1) - y_est) * X[:, i]
+                self.b = self.b + self.eta * \
+                    (Y[:, i].reshape(-1, 1) - y_est).transpose()
+                print("W despues: \n{} \nBias despues: {}".format(self.w, self.b))
                 # checar si es necesario hacer reshape del X[:,i]
 
             # limpiar
             plt.cla()
 
             # formatear estimaciones
-            print("Estimaciones antes: \n",estimaciones)
+            print("Estimaciones antes: \n", estimaciones)
             estimaciones = self.formatearEstimaciones(estimaciones)
-            print("Estimaciones despues: \n",estimaciones)
+            print("Estimaciones despues: \n", estimaciones)
 
             # plottear puntos a color
             self.graficador.plotMatrix(X, estimaciones)
-            
+
             # plottear linea
             for i in range(len(self.w)):
-                self.graficador.drawDivision([self.punto(self.w[i,0], self.w[i,1], -self.b[0,i], -5),
-                                            self.punto(self.w[i,0], self.w[i,1], -self.b[0,i], 5)],)
-
+                self.graficador.drawDivision([self.punto(self.w[i, 0], self.w[i, 1], -self.b[0, i], -5),
+                                              self.punto(self.w[i, 0], self.w[i, 1], -self.b[0, i], 5)],)
 
             # actualizar
             self.guardarActualizar(ui)
 
             # se logró el objetivo?
             if self.aprendizajeTerminado(Y, estimaciones):
-                print("X: \n{} \nY: \n{} \n Estimaciones: \n{}".format(X,Y,estimaciones))
+                print("X: \n{} \nY: \n{} \n Estimaciones: \n{}".format(
+                    X, Y, estimaciones))
                 break
 
             # retraso para visualizar
@@ -193,18 +194,16 @@ class Red:
         plt.savefig("prueba.png")
         ui.label.setPixmap(QtGui.QPixmap("prueba.png"))
 
-
     # retorna lista de estimaciones formateada
     def formatearEstimaciones(self, estimaciones):
-        
-        newEstimacion = [] # lista con las estimaciones formateadas
+
+        newEstimacion = []  # lista con las estimaciones formateadas
 
         # convertimos numpy array to list
         for array in estimaciones:
             newEstimacion.append(array.tolist()[0])
 
         return newEstimacion
-            
 
     # limpia puntos viejos y reinicia pesos y bias
     def clear(self, n_input=2, learning_rate=0.1):
@@ -217,4 +216,3 @@ class Red:
         # bias random con rango [-1,1]
         self.b = -1 + (1 - (-1)) * np.random.rand()
         self.eta = learning_rate
-

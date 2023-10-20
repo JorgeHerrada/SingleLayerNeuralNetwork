@@ -57,8 +57,8 @@
    <widget class="QLabel" name="lblNombre">
     <property name="geometry">
      <rect>
-      <x>780</x>
-      <y>580</y>
+      <x>770</x>
+      <y>0</y>
       <width>281</width>
       <height>41</height>
      </rect>
@@ -72,7 +72,7 @@
      <enum>Qt::LeftToRight</enum>
     </property>
     <property name="text">
-     <string>Herrada Serrano Jorge Luis</string>
+     <string>García Efraín</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -115,6 +115,54 @@
     </property>
     <property name="text">
      <string>salidas1.csv</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblNombre_2">
+    <property name="geometry">
+     <rect>
+      <x>770</x>
+      <y>30</y>
+      <width>281</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="text">
+     <string>García Luis</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblNombre_3">
+    <property name="geometry">
+     <rect>
+      <x>770</x>
+      <y>60</y>
+      <width>281</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="text">
+     <string>Herrada Jorge</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
