@@ -10,6 +10,7 @@ import numpy as np
 class MainWindow(QMainWindow):
     entradas = []
     salidas = []
+    testDataFile = 'testData.csv'
 
     def __init__(self):
         super(MainWindow, self).__init__()  # inicializa desde clase padre
@@ -34,10 +35,11 @@ class MainWindow(QMainWindow):
             print("Archivo salida: {}".format(self.ui.txtSalida.text()))
             # print("Archivo seleccionado: entradas1.csv")
             # leemos y definimos X y Y desde archivos
-            X, Y = self.leerEntradasSalidas(
-                self.ui.txtEntrada.text(), self.ui.txtSalida.text())
-            # X,Y = self.leerEntradasSalidas("entradas1.csv") # PRUEBAS
-        except:
+            X = self.readDataToMatrix(self.ui.txtEntrada.text())
+            print("se cargó X")
+            Y = self.readDataToMatrix(self.ui.txtSalida.text())
+            print("se cargó Y")
+        except ():
             print("ERROR con los archivos. Revisa que los archivos existen.")
             return
 
@@ -48,92 +50,53 @@ class MainWindow(QMainWindow):
         print("Pesos W: \n", self.red.w)
         print("Y esperada: \n", Y)
 
-        # limpiamos
-        # self.entradas = []
-        # self.salidas = []
+        # limpiarplot
+        # self.red.plotClear()
 
-    # lee las entradas y salidas esperadas para el entrenamiento
-    def leerEntradasSalidas(self, entrada, salida):
+        # Use testData
+        X_test = self.readDataToMatrix(self.testDataFile)
+        Y_test = self.red.predict(X_test)
 
-        with open(entrada, 'r') as file:
+        # formateo de estimaciones para poder plotear
+        # print("Estimaciones antes: \n", Y_test.T)
+        Y_test = self.formatearEstimacionesTest(Y_test.T)  # Y_test transpuesta
+        # print("Estimaciones despues: \n", Y_test)
+
+        # plot data
+        self.red.graficador.plotMatrix(X_test, Y_test)
+
+        # save plot and update to UI
+        self.red.guardarActualizar(self.ui)
+
+    # lee los datos de una archivo y retorna una matriz forma m x n
+    # m es el numero de patrones de entrenamiento
+    # n es el numero de entradas
+
+    def formatearEstimacionesTest(self, estimaciones):
+
+        newEstimacion = []  # lista con las estimaciones formateadas
+
+        # convertimos numpy array to list
+        for array in estimaciones:
+            newEstimacion.append(array.tolist())
+
+        return newEstimacion
+
+    def readDataToMatrix(self, dataFile):
+
+        with open(dataFile, 'r') as file:
             lines = file.readlines()
 
         lines = self.limpiarSaltos(lines)  # limpiar saltos de linea
-        # print("Lineas X: ",lines)
 
-        # Creamos matriz de entradas de forma n x m
-        # n es el numero de patrones de entrenamiento
-        # m es el numero de entradas
-        X = np.zeros(shape=(len(lines), lines[0].count(",")+1))
+        # Creamos matriz
+        matrix = np.zeros(shape=(len(lines), lines[0].count(",")+1))
 
         for i, line in enumerate(lines):
             for j, column in enumerate(line.split(",")):
-                X[i, j] = float(column)
+                matrix[i, j] = float(column)
 
-        print("X: \n", X.transpose())
-
-        # nombreArchivoSalidas = "salidas1.csv"
-
-        with open(salida, 'r') as file:
-            lines = file.readlines()
-
-        lines = self.limpiarSaltos(lines)
-        # print(lines[0].split(","))
-        # print(lines)
-        Y = np.zeros(shape=(len(lines), lines[0].count(",")+1))
-
-        for i, line in enumerate(lines):
-            for j, column in enumerate(line.split(",")):
-                # print("estados: ",i,j)
-                Y[i, j] = float(column)
-
-        Y = Y.transpose()
-
-        # Matriz de salidas deseadas (1 por cada par de entradas)
-        print("Y: \n", Y)
-
-        return X.transpose(),Y
-
- 
-    # def agregar(self):
-        try:
-            # Primer punto? limpiamos plot
-            if len(self.entradas) == 0:
-                self.neuron.clear()
-
-            # hay texto en las cajas?
-            if self.ui.txtX1.text() != "" and self.ui.txtX2.text() != "":
-                # guardamos guardamos entradas (x1,x2) y salidas (y)
-                self.entradas.append([float(self.ui.txtX1.text()),float(self.ui.txtX2.text())])
-                print("entradas: ",self.entradas)
-
-                # Ploteamos punto agregado en coordenada y color correspondiente
-                if self.ui.checkBox.checkState():
-                    # agregamos 1 a la lista de salidas deseadas 
-                    self.salidas.append(1)
-                    
-                    # PLOTTEAR
-                    self.neuron.graficador.setPunto(self.entradas[-1][0],self.entradas[-1][1],1)
-                else:
-                    # agregamos 0 a la lista de salidas deseadas 
-                    self.salidas.append(0)
-
-                    # PLOTTEAR
-                    self.neuron.graficador.setPunto(self.entradas[-1][0],self.entradas[-1][1],0)
-                # print("Salidas: ", self.salidas)
-            else:
-                print("Entrada invalida")
-            
-            # actualizar UI
-            # print("apunto de guardarActualizar")
-            self.neuron.guardarActualizar(self.ui)
-
-            # limpiar 
-            self.ui.txtX1.setText("")
-            self.ui.txtX2.setText("")
-
-        except ValueError:
-            print("¡Error en la entrada! - ",ValueError)
+        return matrix.transpose()
 
     # Recibe una lista de lineas,
     # Retorna la lista de lineas sin los saltos de linea finales
@@ -144,43 +107,3 @@ class MainWindow(QMainWindow):
                 lineas[i] = lineas[i][:-1]
 
         return lineas
-
-    # # def agregar(self):
-    #     try:
-    #         # Primer punto? limpiamos plot
-    #         if len(self.entradas) == 0:
-    #             self.neuron.clear()
-
-    #         # hay texto en las cajas?
-    #         if self.ui.txtX1.text() != "" and self.ui.txtX2.text() != "":
-    #             # guardamos guardamos entradas (x1,x2) y salidas (y)
-    #             self.entradas.append([float(self.ui.txtX1.text()),float(self.ui.txtX2.text())])
-    #             print("entradas: ",self.entradas)
-
-    #             # Ploteamos punto agregado en coordenada y color correspondiente
-    #             if self.ui.checkBox.checkState():
-    #                 # agregamos 1 a la lista de salidas deseadas
-    #                 self.salidas.append(1)
-
-    #                 # PLOTTEAR
-    #                 self.neuron.graficador.setPunto(self.entradas[-1][0],self.entradas[-1][1],1)
-    #             else:
-    #                 # agregamos 0 a la lista de salidas deseadas
-    #                 self.salidas.append(0)
-
-    #                 # PLOTTEAR
-    #                 self.neuron.graficador.setPunto(self.entradas[-1][0],self.entradas[-1][1],0)
-    #             # print("Salidas: ", self.salidas)
-    #         else:
-    #             print("Entrada invalida")
-
-    #         # actualizar UI
-    #         # print("apunto de guardarActualizar")
-    #         self.neuron.guardarActualizar(self.ui)
-
-    #         # limpiar
-    #         self.ui.txtX1.setText("")
-    #         self.ui.txtX2.setText("")
-
-    #     except ValueError:
-    #         print("¡Error en la entrada! - ",ValueError)

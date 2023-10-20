@@ -43,32 +43,31 @@ class Red:
 
     # Entrega un vector de salidas, dada una matriz de
     # entradas para la neurona
-
     def predict(self, X):
 
         # nPatrones = # de colmunas en la matriz X (candidad de patrones de entrenamiento)
         nPatrones = X.shape[1]
-        print("nPatrones: \n{}\nX: \n{}".format(nPatrones, X))
+        # print("nPatrones: \n{}\nX: \n{}".format(nPatrones, X))
 
         # neuronas = cantidad de neuronas
         nNeuronas = self.b.shape[1]
-        print("nNeuronas: \n{}\nBias: \n{}".format(nNeuronas, self.b))
+        # print("nNeuronas: \n{}\nBias: \n{}".format(nNeuronas, self.b))
 
         # y_est guardará la salidas, se inicializa
         # como matriz de numNeuronas * nPatrones en 0s
         y_est = np.zeros(shape=(nNeuronas, nPatrones))
-        print("y_est inicializado: \n{}".format(y_est))
+        # print("y_est inicializado: \n{}".format(y_est))
 
         # Producto punto de la matriz de pesos y matriz de entradas (w * X) + bias
         # dot() realiza el producto punto de cada fila en W contra toda la matriz X (nNeuronas veces)
         # Acomoda cada resultado en una matriz de nNeuronas * nPatrones
         # el bias se transpone para ser vector columna y sumarse a la fila correspondiente de la matriz y_est
         y_est = np.dot(self.w, X) + self.b.transpose()
-        print("Producto punto: \n", y_est)
+        # print("Producto punto: \n", y_est)
 
         # mandamos salida estimada a funcion de activación
         y_est = self.f_activacion(y_est)
-        print("Funcion de activacion, y_est: \n", y_est)
+        # print("Funcion de activacion, y_est: \n", y_est)
 
         # retornamos vector con las salidas binarias
         return y_est
@@ -124,8 +123,8 @@ class Red:
                 print("W despues: \n{} \nBias despues: {}".format(self.w, self.b))
                 # checar si es necesario hacer reshape del X[:,i]
 
-            # limpiar
-            plt.cla()
+            # limpiar plot
+            self.plotClear()
 
             # formatear estimaciones
             print("Estimaciones antes: \n", estimaciones)
@@ -204,6 +203,10 @@ class Red:
             newEstimacion.append(array.tolist()[0])
 
         return newEstimacion
+
+    # limpia SOLAMENTE la interfaz no modifica pesos, etc
+    def plotClear(self):
+        plt.cla()
 
     # limpia puntos viejos y reinicia pesos y bias
     def clear(self, n_input=2, learning_rate=0.1):

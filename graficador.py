@@ -1,13 +1,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 class Graficafor:
     # Select length of axes and the space between tick labels
     xmin, xmax, ymin, ymax = -3, 3, -3, 3
     ticks_frequency = 1
 
     # Plot points
-    fig, ax = plt.subplots(figsize=(10, 10))    
+    fig, ax = plt.subplots(figsize=(10, 10))
 
     # rango de linea divisoria
     rangoLinea = [-5, 5]
@@ -41,54 +42,48 @@ class Graficafor:
     # Draw major and minor grid lines
     ax.grid(which='both', color='grey',
             linewidth=1, linestyle='-', alpha=0.2)
-    
+
     # Draw arrows
     arrow_fmt = dict(markersize=4, color='black', clip_on=False)
     ax.plot((1), (0), marker='>',
             transform=ax.get_yaxis_transform(), **arrow_fmt)
     ax.plot((0), (1), marker='^',
             transform=ax.get_xaxis_transform(), **arrow_fmt)
-    
-    
+
     def __init__(self) -> None:
-        # Create figure 
+        # Create figure
         self.fig, self.ax = plt.subplots(figsize=(10, 10))
-        
-    
+
     # plotmatriz
-    def plotMatrix(self,X,Y):
-        
+    def plotMatrix(self, X, Y):
+
         nColores = len(Y)
         dicColores = {}
         colorList = []
-        # agregamos las combinaciones de las salidas Y como llave a un diccionario 
+        # agregamos las combinaciones de las salidas Y como llave a un diccionario
         # y les asignamos un numero en rango[0,nColores-1] como valor
         # garantiza mismo valor para patrones repetidos en Y
         for opc in range(nColores):
             dicColores[str(Y[opc])] = opc
-            
-        # el valor del patron se usa para calcular 
-        # un numero en rango [0,100] 
+
+        # el valor del patron se usa para calcular
+        # un numero en rango [0,100]
         for e in Y:
-            colorList.append( int( ( 100 / (nColores-1)) * dicColores[str(e)]))
+            colorList.append(int((100 / (nColores-1)) * dicColores[str(e)]))
 
         # colorList = np.array(colorList)
-        
-        print("Dic Colores: ",dicColores)
-        print("ColorList: ",colorList)
+
+        print("Dic Colores: ", dicColores)
+        print("ColorList: ", colorList)
 
         # ploteamos todos los puntos en x,y con su color asignago en colorList
-        self.ax.scatter(X[0],X[1],c=colorList,cmap="nipy_spectral",s=300)
-        self.ax.set_ylim([-5, 5])
+        self.ax.scatter(X[0], X[1], c=colorList, cmap="nipy_spectral", s=200)
+        self.ax.set_ylim([-15, 15])
+        self.ax.set_xlim([-15, 15])
 
+    # plotteamos linea
 
-
-
-    # plotteamos linea 
     def drawDivision(self, pts, _color="r"):
         # Plot de la linea divisoria
-        plt.plot([self.rangoLinea[0], self.rangoLinea[1]], [pts[0], pts[1]], color=_color)
-
-
-    
-
+        plt.plot([self.rangoLinea[0], self.rangoLinea[1]],
+                 [pts[0], pts[1]], color=_color)

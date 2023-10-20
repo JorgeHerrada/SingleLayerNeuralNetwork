@@ -1,8 +1,8 @@
 # use it to generate you own test data
 
 # Define range
-min = -10
-max = 11
+min = -15
+max = 15
 
 # output file
 fileName = "testData.csv"
